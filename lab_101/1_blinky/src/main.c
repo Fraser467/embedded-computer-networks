@@ -40,6 +40,7 @@ int main()
     
     // wait for 1 second
     HAL_Delay(1000);
+		
   }
 }
 

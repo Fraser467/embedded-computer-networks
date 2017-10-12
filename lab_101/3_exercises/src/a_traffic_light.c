@@ -14,7 +14,9 @@
 #include "gpio.h"
 
 // map the led to GPIO PA8
-gpio_pin_t led = {PI_1, GPIOI, GPIO_PIN_1};
+gpio_pin_t led1 = {PI_1, GPIOI, GPIO_PIN_1};
+gpio_pin_t led2 = {PI_2, GPIOI, GPIO_PIN_2};
+gpio_pin_t led3 = {PI_3, GPIOI, GPIO_PIN_3};
 
 // this is the main method
 int main()
@@ -25,15 +27,26 @@ int main()
   init_sysclk_216MHz();
   
   // initialise the gpio pin
-  init_gpio(led, OUTPUT);
+  init_gpio(led1, OUTPUT);
+	init_gpio(led2, OUTPUT);
+	init_gpio(led3, OUTPUT);
   
   // loop forever ...
   while(1)
   {
     // toggle the led on the gpio pin
-    toggle_gpio(led);
+    toggle_gpio(led1);
     
     // wait for 1 second
     HAL_Delay(1000);
+		
+		toggle_gpio(led1);
+		toggle_gpio(led2);
+		
+		HAL_Delay(1000);
+		
+		toggle_gpio(led3);
+		
+		HAL_Delay(1000);
   }
 }
