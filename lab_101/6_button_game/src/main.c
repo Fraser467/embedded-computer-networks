@@ -25,12 +25,17 @@
 // DECLARATIONS
 
 // leds
-gpio_pin_t led1 = {PB_8, GPIOB, GPIO_PIN_8};
-gpio_pin_t led2 = {PB_9, GPIOB, GPIO_PIN_9};
+gpio_pin_t led1 = {PI_2, GPIOI, GPIO_PIN_2};
+gpio_pin_t led2 = {PA_15, GPIOA, GPIO_PIN_15};
+gpio_pin_t led3 = {PB_14, GPIOB, GPIO_PIN_14};
+gpio_pin_t led4 = {PI_1, GPIOI, GPIO_PIN_1};
 
 // buttons
-gpio_pin_t pb1 = {PC_6, GPIOC, GPIO_PIN_6};
-gpio_pin_t pb2 = {PC_7, GPIOC, GPIO_PIN_7};
+gpio_pin_t pb1 = {PC_7, GPIOC, GPIO_PIN_7};
+gpio_pin_t pb2 = {PC_6, GPIOC, GPIO_PIN_6};
+gpio_pin_t pb3 = {PG_6, GPIOG, GPIO_PIN_6};
+gpio_pin_t pb4 = {PB_4, GPIOB, GPIO_PIN_4};
+
 
 // local game functions
 uint8_t get_led(void);
@@ -54,8 +59,13 @@ int main()
   // set up the gpio
   init_gpio(led1, 0);
   init_gpio(led2, 0);
+	init_gpio(led3, 0);
+  init_gpio(led4, 0);
+
   init_gpio(pb1, 1);
   init_gpio(pb2, 1);
+	init_gpio(pb3, 1);
+  init_gpio(pb4, 1);
   
   // print an initial status message
   printf("we are alive!\r\n");
@@ -129,7 +139,7 @@ uint8_t get_led()
   printf("Random number = %d\r\n", (random_num % 4));
 
   // use the random number to calculate which led to switch on
-  current_led = (random_num % 2) + 1;
+  current_led = (random_num % 4) + 1;
   if(current_led == 1)
   {
     write_gpio(led1, HIGH);
