@@ -53,7 +53,7 @@ int main()
   init_sysclk_216MHz();
   
   // initialise the uart and random number generator
-  init_uart(115200);
+  init_uart(9600);
   init_random();
   
   // set up the gpio
@@ -94,6 +94,8 @@ int main()
     {
       // get the current guess
       guessed_led = get_guess();
+			
+			printf("guessed LED = %d\n",guessed_led);
 
       // check if we have actually made a guess
       if(guessed_led != 0)
@@ -136,17 +138,25 @@ uint8_t get_led()
 
   // get a random number
   random_num = get_random_int();
-  printf("Random number = %d\r\n", (random_num % 4));
+  printf("Random number = %d\r\n", (random_num % 4)+1);
 
   // use the random number to calculate which led to switch on
-  current_led = (random_num % 4) + 1;
+  current_led = ((random_num % 4) + 1);
   if(current_led == 1)
   {
     write_gpio(led1, HIGH);
   }
   if(current_led == 2)
   {
-    write_gpio(led2, LOW);
+    write_gpio(led2, HIGH);
+  }
+	if(current_led == 3)
+  {
+    write_gpio(led3, HIGH);
+  }
+	if(current_led == 4)
+  {
+    write_gpio(led4, HIGH);
   }
 
   // return the chosen led
@@ -159,10 +169,14 @@ uint8_t get_guess()
   // initialise variables for the button states
   uint8_t button_1_state = 0;
   uint8_t button_2_state = 0;
+	uint8_t button_3_state = 0;
+  uint8_t button_4_state = 0;
 
   // read the buttons
   button_1_state = read_gpio(pb1);
   button_2_state = read_gpio(pb2);
+	button_3_state = read_gpio(pb3);
+  button_4_state = read_gpio(pb4);
   
   // wait for a short period of time
   HAL_Delay(25);
@@ -170,10 +184,12 @@ uint8_t get_guess()
   // read the buttons again
   button_1_state = button_1_state & read_gpio(pb1);
   button_2_state = button_2_state & read_gpio(pb2);
+	button_3_state = button_3_state & read_gpio(pb3);
+  button_4_state = button_4_state & read_gpio(pb4);
 
   // return a bit mask representing which led we guessed 
   // (00000010 is led 2)
-  return ((button_2_state << 1) | (button_1_state));
+  return ((button_4_state << 3) | (button_3_state << 2) | (button_2_state << 1) | (button_1_state));
 }
 
 void clear_leds()
@@ -181,4 +197,6 @@ void clear_leds()
   // remember to clear all leds
   write_gpio(led1, LOW);
   write_gpio(led2, LOW);
+	write_gpio(led3, LOW);
+  write_gpio(led4, LOW);
 }
